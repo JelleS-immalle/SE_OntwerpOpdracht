@@ -31,6 +31,7 @@ public class DeliveryControllerTest {
         //TODO (week 3-4) Laat onderstaande for-loops staan. Hier wordt de testdata doorgegeven aan de controller. Zorg er voor dat de data wordt opgeslagen op een logische plaats in de businesslaag.
         //TODO (week 4-5) De data moet in afzonderlijke laag worden opgeslagen .
         for (Courier courier : data.getCouriers()) {
+            System.out.println("Test");
             ctrl.addCourier(courier);
         }
 
