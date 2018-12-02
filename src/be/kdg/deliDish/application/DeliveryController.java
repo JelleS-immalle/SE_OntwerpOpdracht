@@ -5,7 +5,9 @@ import be.kdg.deliDish.business.domain.order.Order;
 import be.kdg.deliDish.business.domain.restaurant.Restaurant;
 import be.kdg.deliDish.business.domain.user.Courier;
 import be.kdg.deliDish.business.domain.user.Customer;
+import be.kdg.deliDish.business.domain.user.DeliveryPointEvent;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -17,9 +19,10 @@ public class DeliveryController {
 
     //Session Info
     private Courier appUser;
-
-
-
+    private Collection<Order> orders;
+    private Collection<Courier> couriers;
+    private Collection<Customer> customers;
+    private Collection<Restaurant> restaurants;
 
 
         /*
@@ -42,30 +45,60 @@ public class DeliveryController {
 
     // TODO (Week 3-4): Methode implementeren (wordt gebruikt om data beschikbaar te stellen)
     public void addOrder(Order o) {
-
+        // Als er nog geen collectie bestaat, er één aanmaken
+        if(this.orders == null){
+            this.orders = new ArrayList<>();
+        }
+        // Vanaf er een collectie is, het Order toevoegen
+        this.orders.add(o);
     }
 
     // TODO (Week 3-4): Methode implementeren (wordt gebruikt om data beschikbaar te stellen)
     public void addCourier(Courier courier) {
+        // Als er nog geen collectie bestaat, er één aanmaken
+        if(this.couriers == null){
+            this.couriers = new ArrayList<>();
+        }
+        // Vanaf er een collectie is, de Courier toevoegen
+        this.couriers.add(courier);
     }
 
     // TODO (Week 3-4): Methode implementeren (wordt gebruikt om data beschikbaar te stellen)
     public void addCustomer(Customer customer) {
-
+        // Als er nog geen collectie bestaat, er één aanmaken
+        if(this.customers == null){
+            this.customers = new ArrayList<>();
+        }
+        // Vanaf er een collectie is, de Customer toevoegen
+        this.customers.add(customer);
     }
 
     // TODO (Week 3-4): Methode implementeren (wordt gebruikt om data beschikbaar te stellen)
     public void addResto(Restaurant restaurant) {
+        // Als er nog geen collectie bestaat, er één aanmaken
+        if(this.restaurants == null){
+            this.restaurants = new ArrayList<>();
+        }
+        // Vanaf er een collectie is, het Restaurant toevoegen
+        this.restaurants.add(restaurant);
     }
 
     // TODO (Week 3-4): Methode implementeren (wordt gebruikt om data beschikbaar te stellen
     public Collection<Courier> getCouriers() {
-        return null;
+        // De collectie van Courier objecten returnen
+        return this.couriers;
     }
 
     // TODO (Week 3-5): Methode implementeren (wordt gebruikt in een test)
     public int getDeliveryPointsTotal(Courier c) {
-        return 0;
+        int totalPoints = 0;
+        // Wanneer de Courier geen DeliveryPointEvents heeft, wordt er 0 teruggegeven
+        if(c.getDeliveryPointEvents() != null) {
+            for (DeliveryPointEvent dpe : c.getDeliveryPointEvents()) {
+                totalPoints += dpe.getPoints();
+            }
+        }
+        return totalPoints;
     }
 
            /*

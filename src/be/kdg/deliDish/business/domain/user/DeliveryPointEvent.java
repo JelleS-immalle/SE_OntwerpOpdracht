@@ -19,4 +19,9 @@ public class DeliveryPointEvent implements Serializable {
     public enum DeliveryPointEventType {
         ORDER_ACCEPTED, ORDER_PICKUP_ONTIME, ORDER_PICKUP_LATE
     }
+
+    // Nodig om de punten op te halen bij het bereken van het totaal punten van een courier
+    public int getPoints() {
+        return points;
+    }
 }
