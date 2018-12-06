@@ -19,6 +19,7 @@ public class DeliveryController {
 
     //Session Info
     private Courier appUser;
+    // TODO Repositories toevoegen! Niet alles in de controller opslagen
     private Collection<Order> orders;
     private Collection<Courier> couriers;
     private Collection<Customer> customers;
