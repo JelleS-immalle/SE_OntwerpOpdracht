@@ -20,7 +20,7 @@ public class DeliveryPointEvent implements Serializable {
         ORDER_ACCEPTED, ORDER_PICKUP_ONTIME, ORDER_PICKUP_LATE
     }
 
-    // Nodig om de punten op te halen bij het bereken van het totaal punten van een courier
+    // Nodig om de punten op te halen bij het berekenen van het totaal punten van een Courier
     public int getPoints() {
         return points;
     }
