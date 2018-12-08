@@ -72,11 +72,12 @@ public class DeliveryControllerTest {
     //TODO (Week 4-5) uncomment test selectDelivery
   /*  @Test
     void selectDelivery() {
+        ctrl.setAppUser(ctrl.getCouriers().stream().filter(u -> u.getFirstName().equals("Frits")).findFirst().get());
         int orderID = ctrl.getAvailableDeliveries().stream().findFirst().get().getOrderID();
         Order selectedOrder = ctrl.selectDelivery(orderID);
-        assertEquals(selectedOrder.getDeliverer(), ctrl.getAppUser());
-        assertEquals(ctrl.getDeliveryPointsTotal(ctrl.getAppUser()), 501 + 5);
-        assertEquals(selectedOrder.getCurrentState(), OrderState.COURIER_ASSIGNED);
+        assertEquals(ctrl.getAppUser(),selectedOrder.getDeliverer());
+        assertEquals(501 + 5,ctrl.getDeliveryPointsTotal(ctrl.getAppUser()) );
+        assertEquals(OrderState.COURIER_ASSIGNED,selectedOrder.getCurrentState() );
     }*/
 
     //TODO (Week 4-5): De volgende twee methoden kunnen optioneel worden uitgewerkt:  uncomment test registerDeliveryPickup en registerSuccesfullDelivery
