@@ -1,5 +1,7 @@
 package be.kdg.deliDish.business.domain.restaurant;
 
+import be.kdg.foundation.contact.Position;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -24,4 +26,11 @@ public class Dish implements Serializable {
         this.restaurant.addDish(this);
     }
 
+    public Position getPosition(){
+        return restaurant.getPosition();
+    }
+
+    public int getProductionTime() {
+        return productionTime;
+    }
 }

@@ -3,6 +3,7 @@ package be.kdg.deliDish.business.domain.restaurant;
 
 import be.kdg.deliDish.business.domain.user.Partner;
 import be.kdg.foundation.contact.Adress;
+import be.kdg.foundation.contact.Position;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ public class Restaurant implements Serializable {
         this.name = name;
         this.adres = adres;
         this.partner = partner;
+    }
+
+    public Position getPosition(){
+        return adres.getPosition();
     }
 
 

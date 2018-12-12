@@ -1,11 +1,20 @@
 package be.kdg.deliDish.business.domain.user;
 
 
+import be.kdg.deliDish.business.CourierManager;
+import be.kdg.deliDish.business.OrderManager;
+import be.kdg.deliDish.business.domain.order.Order;
+import be.kdg.distanceAPI.DistanceCalculator;
+import be.kdg.distanceAPI.Point;
 import be.kdg.foundation.contact.ContactInfo;
 import be.kdg.foundation.contact.Position;
+import org.threeten.extra.Minutes;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -56,5 +65,41 @@ public class Courier extends User {
     public void setAvailable(boolean available) {
 
         isAvailable = available;
+    }
+
+    public List<Order> geefBeschikbareLeveringen(){
+        DistanceCalculator dc = new DistanceCalculator();
+        CourierManager cmanager = new CourierManager();
+        OrderManager omanager = new OrderManager();
+        List<Order> relevanteOrders = new ArrayList<>();
+        Collection<Order> openOrders = omanager.getOrders();
+        String country = "Belgium";
+
+        if (country.equals("Belgium")){
+            for (Order o : openOrders){
+                if (relevanteOrders.size() < 4){
+                    Position restaurantPos = o.getRestaurantPosition();
+                    Position currentPos = getCurrentPosition();
+                    double afstand = dc.getDistance(new Point(currentPos.getLattitude(), currentPos.getLongitude()), new Point(restaurantPos.getLattitude(), restaurantPos.getLongitude()));
+                    int lowestProductionTime = omanager.getLowestProductionManager(o);
+
+                    if (afstand * 4 < lowestProductionTime){
+                        LocalDateTime orderedTime = omanager.getTimeOrdered(o);
+                        if (Minutes.between(LocalDateTime.now(), orderedTime).getAmount() < 5){
+                            int averagePoints = omanager.getAverageCourierDeliveryPoints(o);
+                            int courierPoints = pointEvents.get(0).getPoints();
+                            if (courierPoints > averagePoints){
+                                relevanteOrders.add(o);
+                            }
+                        } else {
+                            relevanteOrders.add(o);
+                        }
+                    }
+                }
+            }
+        } else {
+            relevanteOrders = omanager.getThreeOldestOrders(openOrders);
+        }
+        return relevanteOrders;
     }
 }
