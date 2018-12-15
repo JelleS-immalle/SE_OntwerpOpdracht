@@ -33,9 +33,11 @@ public class OrderMemoryRepository implements OrderRepository {
     }
 
     @Override
-    //TODO  --> sorter parameter nodig?
     public Collection<Order> findWhere(Predicate predicate, Comparator<Order> sorter) {
-        return null;
+        return orders.stream()
+                .filter(predicate::test)
+                .sorted(sorter)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -51,12 +53,4 @@ public class OrderMemoryRepository implements OrderRepository {
                 .filter(predicate::test)
                 .findFirst().get();
     }
-
-    @Override
-    //TODO --> via welk attribuut een waarde ophalen?
-    public Order get(int id) {
-        return null;
-    }
-
-
 }

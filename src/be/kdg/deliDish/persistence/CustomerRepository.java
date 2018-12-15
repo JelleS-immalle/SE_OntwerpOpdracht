@@ -26,6 +26,4 @@ public interface CustomerRepository extends Repository<Customer> {
     @Override
     Customer findOneWhere(Predicate predicate);
 
-    @Override
-    Customer get(int id);
 }

@@ -16,7 +16,4 @@ public interface Repository <V> {
     Collection<V> findWhere(Predicate predicate);
 
     V findOneWhere(Predicate predicate);
-
-    //TODO --> In het DCD staat 'get(entity):V', moet er een type worden meegegeven aan deze parameter?
-    V get(int id);
 }

@@ -35,7 +35,10 @@ public class RestaurantMemoryRepository implements RestaurantRepository {
     @Override
     //TODO  --> sorter parameter nodig?
     public Collection<Restaurant> findWhere(Predicate predicate, Comparator<Restaurant> sorter) {
-        return null;
+        return restaurants.stream()
+                .filter(predicate::test)
+                .sorted(sorter)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -50,11 +53,5 @@ public class RestaurantMemoryRepository implements RestaurantRepository {
         return restaurants.stream()
                 .filter(predicate::test)
                 .findFirst().get();
-    }
-
-    @Override
-    //TODO --> via welk attribuut een waarde ophalen?
-    public Restaurant get(int id) {
-        return null;
     }
 }

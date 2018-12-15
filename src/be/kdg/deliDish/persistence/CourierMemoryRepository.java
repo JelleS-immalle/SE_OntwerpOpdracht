@@ -29,9 +29,11 @@ public class CourierMemoryRepository implements CourierRepository {
     }
 
     @Override
-    //TODO  --> sorter parameter nodig?
     public Collection<Courier> findWhere(Predicate predicate, Comparator<Courier> sorter) {
-        return null;
+        return couriers.stream()
+                .filter(predicate::test)
+                .sorted(sorter)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -46,11 +48,5 @@ public class CourierMemoryRepository implements CourierRepository {
         return couriers.stream()
                 .filter(predicate::test)
                 .findFirst().get();
-    }
-
-    @Override
-    //TODO --> via welk attribuut een waarde ophalen?
-    public Courier get(int id) {
-        return null;
     }
 }

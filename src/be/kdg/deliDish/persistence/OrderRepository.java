@@ -25,7 +25,4 @@ public interface OrderRepository extends Repository<Order> {
 
     @Override
     Order findOneWhere(Predicate predicate);
-
-    @Override
-    Order get(int id);
 }

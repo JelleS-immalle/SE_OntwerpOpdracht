@@ -33,9 +33,11 @@ public class CustomerMemoryRepository implements CustomerRepository {
     }
 
     @Override
-    //TODO  --> sorter parameter nodig?
     public Collection<Customer> findWhere(Predicate predicate, Comparator<Customer> sorter) {
-        return null;
+        return customers.stream()
+                .filter(predicate::test)
+                .sorted(sorter)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -50,11 +52,5 @@ public class CustomerMemoryRepository implements CustomerRepository {
         return customers.stream()
                 .filter(predicate::test)
                 .findFirst().get();
-    }
-
-    @Override
-    //TODO --> via welk attribuut een waarde ophalen?
-    public Customer get(int id) {
-        return null;
     }
 }

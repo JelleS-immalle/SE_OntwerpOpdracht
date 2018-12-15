@@ -25,7 +25,4 @@ public interface CourierRepository extends Repository<Courier> {
 
     @Override
     Courier findOneWhere(Predicate predicate);
-
-    @Override
-    Courier get(int id);
 }

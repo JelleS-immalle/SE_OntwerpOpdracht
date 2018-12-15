@@ -25,7 +25,4 @@ public interface RestaurantRepository extends Repository<Restaurant> {
 
     @Override
     Restaurant findOneWhere(Predicate predicate);
-
-    @Override
-    Restaurant get(int id);
 }
