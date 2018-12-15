@@ -70,6 +70,10 @@ public class Order implements Serializable {
         return events.get(events.size() - 1).getOrderState();
     }
 
+    public void setDeliverer(Courier deliverer) {
+        this.deliverer = deliverer;
+    }
+
     public void addEvent(OrderEvent e) {
         events.add(e);
     }

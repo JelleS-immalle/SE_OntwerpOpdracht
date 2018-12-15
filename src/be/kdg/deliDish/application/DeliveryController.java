@@ -10,15 +10,9 @@ import be.kdg.deliDish.business.domain.restaurant.Restaurant;
 import be.kdg.deliDish.business.domain.user.Courier;
 import be.kdg.deliDish.business.domain.user.Customer;
 import be.kdg.deliDish.business.domain.user.DeliveryPointEvent;
-import be.kdg.distanceAPI.DistanceCalculator;
-import be.kdg.distanceAPI.Point;
-import be.kdg.foundation.contact.Position;
-import org.threeten.extra.Minutes;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Jan Van Overveldt.
@@ -99,42 +93,7 @@ public class DeliveryController {
     // TODO (Week 3-4): Dit is DE methode die in bij de eerste oplevering moest uitgewerkt worden comform de interactiediagrammen die ook worden uitgewerkt.
     // TODO (Week 4-5): In de definitieve  moet de implementatie van deze methode aangepast worden (zie beschrijving)
     public Collection<Order> getAvailableDeliveries() {
-        DistanceCalculator dc = new DistanceCalculator();
-        List<Order> relevanteOrders = new ArrayList<>();
-        Collection<Order> openOrders = orderManager.getOrders();
-        String country = appUser.getContactInfo().getAdress().getCity().getCountry();
-
-        if (country.equals("Belgium")){
-            for (Order o : openOrders){
-                if (relevanteOrders.size() < 4){
-                    Position restaurantPos = o.getRestaurantPosition();
-                    Position currentPos = appUser.getCurrentPosition();
-                    double afstand = dc.getDistance(new Point(currentPos.getLattitude(), currentPos.getLongitude()), new Point(restaurantPos.getLattitude(), restaurantPos.getLongitude()));
-                    int lowestProductionTime = orderManager.getLowestProductionManager(o);
-
-                    if (afstand * 4 < lowestProductionTime){
-                        LocalDateTime orderedTime = orderManager.getTimeOrdered(o);
-                        if (Minutes.between(LocalDateTime.now(), orderedTime).getAmount() < 5){
-                            int averagePoints = orderManager.getAverageCourierDeliveryPoints(o);
-                            Collection<DeliveryPointEvent> pointEvents = appUser.getDeliveryPointEvents();
-                            int points = 0;
-                            for (DeliveryPointEvent dpe : pointEvents){
-                                points += dpe.getPoints();
-                            }
-                            int courierPoints = points;
-                            if (courierPoints > averagePoints){
-                                relevanteOrders.add(o);
-                            }
-                        } else {
-                            relevanteOrders.add(o);
-                        }
-                    }
-                }
-            }
-        } else {
-            relevanteOrders = orderManager.getThreeOldestOrders(openOrders);
-        }
-        return relevanteOrders;
+        return null;
     }
 
     // TODO (Week 4-5): Deze methode moet ontworpen worden voor de de definitieve oplevering. Code en diagrammen moet consistent zijn.
