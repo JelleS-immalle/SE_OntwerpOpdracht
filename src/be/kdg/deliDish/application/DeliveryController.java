@@ -6,13 +6,21 @@ import be.kdg.deliDish.business.CustomerManager;
 import be.kdg.deliDish.business.OrderManager;
 import be.kdg.deliDish.business.RestaurantManager;
 import be.kdg.deliDish.business.domain.order.Order;
+import be.kdg.deliDish.business.domain.order.OrderEvent;
+import be.kdg.deliDish.business.domain.order.OrderState;
 import be.kdg.deliDish.business.domain.restaurant.Restaurant;
 import be.kdg.deliDish.business.domain.user.Courier;
 import be.kdg.deliDish.business.domain.user.Customer;
 import be.kdg.deliDish.business.domain.user.DeliveryPointEvent;
+import be.kdg.distanceAPI.DistanceCalculator;
+import be.kdg.distanceAPI.Point;
+import be.kdg.foundation.contact.Position;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Jan Van Overveldt.
@@ -93,12 +101,57 @@ public class DeliveryController {
     // TODO (Week 3-4): Dit is DE methode die in bij de eerste oplevering moest uitgewerkt worden comform de interactiediagrammen die ook worden uitgewerkt.
     // TODO (Week 4-5): In de definitieve  moet de implementatie van deze methode aangepast worden (zie beschrijving)
     public Collection<Order> getAvailableDeliveries() {
-        return null;
+        DistanceCalculator dc = new DistanceCalculator();
+        List<Order> relevanteOrders = new ArrayList<>();
+        Collection<Order> openOrders = orderManager.getOrders();
+        String country = appUser.getContactInfo().getAdress().getCity().getCountry();
+        if (country.equals("Belgium")){
+            for (Order o : openOrders){
+                if (relevanteOrders.size() < 4){
+                    Position restaurantPos = o.getRestaurantPosition();
+                    Position currentPos = appUser.getCurrentPosition();
+                    double afstand = dc.getDistance(new Point(currentPos.getLattitude(), currentPos.getLongitude()), new Point(restaurantPos.getLattitude(), restaurantPos.getLongitude()));
+                    int lowestProductionTime = orderManager.getLowestProductionManager(o);
+                    if (afstand * 4 < lowestProductionTime){
+                        LocalDateTime orderedTime = orderManager.getTimeOrdered(o);
+                        if (Minutes.between(LocalDateTime.now(), orderedTime).getAmount() < 5){
+                            int averagePoints = orderManager.getAverageCourierDeliveryPoints(o);
+                            Collection<DeliveryPointEvent> pointEvents = appUser.getDeliveryPointEvents();
+                            int points = 0;
+                            for (DeliveryPointEvent dpe : pointEvents){
+                                points += dpe.getPoints();
+                            }
+                            int courierPoints = points;
+                            if (courierPoints > averagePoints){
+                                relevanteOrders.add(o);
+                            }
+                        } else {
+                            relevanteOrders.add(o);
+                        }
+                    }
+                }
+            }
+        } else {
+            relevanteOrders = orderManager.getThreeOldestOrders(openOrders);
+        }
+        return relevanteOrders;
     }
 
     // TODO (Week 4-5): Deze methode moet ontworpen worden voor de de definitieve oplevering. Code en diagrammen moet consistent zijn.
     public Order selectDelivery(int orderId) {
-        return null;
+        Collection<Order> orders = orderManager.getOrders();
+
+        Optional<Order> optOrder = orders.stream().filter(o -> o.getOrderID() == orderId).findFirst();
+
+        Order order = optOrder.orElseGet(() -> null);
+
+        if (order != null){
+            order.setDeliverer(appUser);
+            OrderEvent orderEvent = new OrderEvent(LocalDateTime.now(), OrderState.COURIER_ASSIGNED, "");
+            order.addEvent(orderEvent);
+        }
+
+        return order;
     }
                /*
     (EINDE UIT TE WERKEN METHODEn)
