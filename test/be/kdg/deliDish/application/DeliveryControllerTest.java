@@ -1,6 +1,7 @@
 package be.kdg.deliDish.application;
 
 import be.kdg.deliDish.business.domain.order.Order;
+import be.kdg.deliDish.business.domain.order.OrderState;
 import be.kdg.deliDish.business.domain.restaurant.Restaurant;
 import be.kdg.deliDish.business.domain.user.Courier;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
@@ -58,19 +60,17 @@ public class DeliveryControllerTest {
         //TODO (Week 4-5) Uncomment onderstaande test voor Belgische couriers.
         //Er zijn verschillende types van beschikbare orders. Twee zijn er beschikbaar. De reden waarom wel en waarom niet staat in de DeliveryInstructions van de testdata. Pas voor deze alternatieve filterlogica de daarvoor logische SOLID patronen toe.
 
-        /*
         ctrl.setAppUser(ctrl.getCouriers().stream().filter(u -> u.getFirstName().equals("Frits")).findFirst().get());
         Collection<Order> availableDeliveries = ctrl.getAvailableDeliveries();
         assertEquals(2, availableDeliveries.size(), "Slechts 2 orders voldoen aan de voorwaarden");
         assertTrue(availableDeliveries.stream().anyMatch(d -> d.getDeliveryInstructions().startsWith("Na vijf minuten")));
         assertTrue(availableDeliveries.stream().anyMatch(d -> d.getDeliveryInstructions().startsWith("Binnen eerste vijf minuten, maar courier heeft meer dan gemiddelde deliveryPoints")));
-        */
 
     }
 
 
     //TODO (Week 4-5) uncomment test selectDelivery
-  /*  @Test
+    @Test
     void selectDelivery() {
         ctrl.setAppUser(ctrl.getCouriers().stream().filter(u -> u.getFirstName().equals("Frits")).findFirst().get());
         int orderID = ctrl.getAvailableDeliveries().stream().findFirst().get().getOrderID();
@@ -78,7 +78,7 @@ public class DeliveryControllerTest {
         assertEquals(ctrl.getAppUser(),selectedOrder.getDeliverer());
         assertEquals(501 + 5,ctrl.getDeliveryPointsTotal(ctrl.getAppUser()) );
         assertEquals(OrderState.COURIER_ASSIGNED,selectedOrder.getCurrentState() );
-    }*/
+    }
 
     //TODO (Week 4-5): De volgende twee methoden kunnen optioneel worden uitgewerkt:  uncomment test registerDeliveryPickup en registerSuccesfullDelivery
   /*  @Test

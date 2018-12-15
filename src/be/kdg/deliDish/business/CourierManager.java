@@ -4,7 +4,6 @@ import be.kdg.deliDish.business.domain.user.Courier;
 import be.kdg.deliDish.business.domain.user.DeliveryPointEvent;
 import be.kdg.deliDish.persistence.CourierMemoryRepository;
 import be.kdg.deliDish.persistence.CourierRepository;
-import be.kdg.foundation.contact.ContactInfo;
 import be.kdg.foundation.contact.Position;
 
 import java.util.Collection;
@@ -37,5 +36,10 @@ public class CourierManager {
             }
         }
         return totalPoints;
+    }
+
+
+    public void addDeliveryPointEvent(Courier courier, DeliveryPointEvent dpe){
+        courier.addPointEvent(dpe);
     }
 }

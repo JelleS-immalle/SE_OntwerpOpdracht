@@ -2,6 +2,7 @@ package be.kdg.deliDish.business;
 
 import be.kdg.deliDish.business.domain.order.Order;
 import be.kdg.deliDish.business.domain.order.OrderState;
+import be.kdg.deliDish.business.domain.user.Courier;
 import be.kdg.deliDish.persistence.OrderMemoryRepository;
 import be.kdg.deliDish.persistence.OrderRepository;
 import be.kdg.foundation.contact.Position;

@@ -107,13 +107,11 @@ class TestData {
         maakOrder(restos.get(0).getDish(0), 3, OrderState.ORDER_PLACED, "Courier te weinig delivery points", 3000, 3);
         maakOrder(restos.get(0).getDish(0), 6, OrderState.COURIER_ASSIGNED, "Status verkeerd", 500, 4);
         maakOrder(restos.get(1).getDish(0), 6, OrderState.ORDER_PLACED, "Resto te ver", 500, 5);
-
     }
 
     public List<Order> getOrders() {
         return orders;
     }
-
 
     public List<Restaurant> getRestos() {
         return restos;

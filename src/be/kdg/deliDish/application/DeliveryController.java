@@ -120,8 +120,8 @@ public class DeliveryController {
                     if (afstand * 4 < lowestProductionTime){
                         LocalDateTime orderedTime = orderManager.getTimeOrdered(o);
 
-                        if (((LocalDateTime.now().until(orderedTime, ChronoUnit.HOURS) * 60) +
-                                LocalDateTime.now().until(orderedTime, ChronoUnit.MINUTES)) < 5){
+                        if (((orderedTime.until(LocalDateTime.now(), ChronoUnit.HOURS) * 60) +
+                                orderedTime.until(LocalDateTime.now(), ChronoUnit.MINUTES)) < 5){
                             int averagePoints = orderManager.getAverageCourierDeliveryPoints(o);
                             int courierPoints = courierManager.getDeliveryPoints(appUser);
 
@@ -152,6 +152,10 @@ public class DeliveryController {
             order.setDeliverer(appUser);
             OrderEvent orderEvent = new OrderEvent(LocalDateTime.now(), OrderState.COURIER_ASSIGNED, "");
             order.addEvent(orderEvent);
+
+            courierManager.addDeliveryPointEvent(
+                    appUser,
+                    new DeliveryPointEvent(5, DeliveryPointEvent.DeliveryPointEventType.ORDER_ACCEPTED));
         }
 
         return order;
