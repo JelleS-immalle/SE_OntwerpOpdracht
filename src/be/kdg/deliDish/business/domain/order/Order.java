@@ -20,7 +20,6 @@ public class Order implements Serializable {
     private Customer customer;
     private Courier deliverer;
     private int averageCourierDeliveryPoints;
-    private LocalDateTime timeOrdered;
 
 
     public String getDeliveryInstructions() {
@@ -34,7 +33,6 @@ public class Order implements Serializable {
         this.deliveryInstructions = deliveryInstructions;
         this.customer = customer;
         this.averageCourierDeliveryPoints = averageDeliveryPoints;
-        this.timeOrdered = LocalDateTime.now();
     }
 
     public int getAverageCourierDeliveryPoints() {
@@ -42,7 +40,17 @@ public class Order implements Serializable {
     }
 
     public LocalDateTime getTimeOrdered() {
-        return timeOrdered;
+        LocalDateTime orderedTime = null;
+
+        for(OrderEvent orderEvent : events){
+            OrderState state = orderEvent.getOrderState();
+
+            if(state == OrderState.ORDER_PLACED){
+                orderedTime = orderEvent.getTimestamp();
+            }
+        }
+
+        return orderedTime;
     }
 
     public Position getRestaurantPosition(){
@@ -51,9 +59,11 @@ public class Order implements Serializable {
     }
 
     public int getLowestProductionTime(){
-        int minProductionTime = 0;
+        int minProductionTime = Integer.MAX_VALUE;
+
         for (OrderLine ol : orderlines){
             int newProductionTime = ol.getProductionTime();
+
             if(minProductionTime > newProductionTime){
                 minProductionTime = newProductionTime;
             }

@@ -62,4 +62,18 @@ public class Courier extends User {
     public ContactInfo getContactInfo() {
         return contactInfo;
     }
+
+    public int getDeliveryPoints(){
+        int totalPoints = 0;
+
+        for(DeliveryPointEvent event : pointEvents){
+            totalPoints += event.getPoints();
+        }
+
+        return totalPoints;
+    }
+
+    public String getCountry(){
+        return contactInfo.getAdress().getCity().getCountry();
+    }
 }

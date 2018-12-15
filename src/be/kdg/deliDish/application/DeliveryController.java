@@ -17,6 +17,7 @@ import be.kdg.distanceAPI.Point;
 import be.kdg.foundation.contact.Position;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -102,26 +103,28 @@ public class DeliveryController {
     // TODO (Week 4-5): In de definitieve  moet de implementatie van deze methode aangepast worden (zie beschrijving)
     public Collection<Order> getAvailableDeliveries() {
         DistanceCalculator dc = new DistanceCalculator();
+        String country = courierManager.getCountry(appUser);
         List<Order> relevanteOrders = new ArrayList<>();
-        Collection<Order> openOrders = orderManager.getOrders();
-        String country = appUser.getContactInfo().getAdress().getCity().getCountry();
+        Collection<Order> openOrders = orderManager.getOpenOrders();
+
         if (country.equals("Belgium")){
             for (Order o : openOrders){
                 if (relevanteOrders.size() < 4){
-                    Position restaurantPos = o.getRestaurantPosition();
-                    Position currentPos = appUser.getCurrentPosition();
-                    double afstand = dc.getDistance(new Point(currentPos.getLattitude(), currentPos.getLongitude()), new Point(restaurantPos.getLattitude(), restaurantPos.getLongitude()));
-                    int lowestProductionTime = orderManager.getLowestProductionManager(o);
+                    Position restaurantPos = orderManager.getRestaurantPosition(o);
+                    Position currentPos = courierManager.getCurrentPosition(appUser);
+                    double afstand = dc.getDistance(
+                            new Point(currentPos.getLattitude(), currentPos.getLongitude()),
+                            new Point(restaurantPos.getLattitude(), restaurantPos.getLongitude()));
+                    int lowestProductionTime = orderManager.getLowestProductionTime(o);
+
                     if (afstand * 4 < lowestProductionTime){
                         LocalDateTime orderedTime = orderManager.getTimeOrdered(o);
-                        if (Minutes.between(LocalDateTime.now(), orderedTime).getAmount() < 5){
+
+                        if (((LocalDateTime.now().until(orderedTime, ChronoUnit.HOURS) * 60) +
+                                LocalDateTime.now().until(orderedTime, ChronoUnit.MINUTES)) < 5){
                             int averagePoints = orderManager.getAverageCourierDeliveryPoints(o);
-                            Collection<DeliveryPointEvent> pointEvents = appUser.getDeliveryPointEvents();
-                            int points = 0;
-                            for (DeliveryPointEvent dpe : pointEvents){
-                                points += dpe.getPoints();
-                            }
-                            int courierPoints = points;
+                            int courierPoints = courierManager.getDeliveryPoints(appUser);
+
                             if (courierPoints > averagePoints){
                                 relevanteOrders.add(o);
                             }

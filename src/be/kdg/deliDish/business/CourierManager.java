@@ -4,6 +4,8 @@ import be.kdg.deliDish.business.domain.user.Courier;
 import be.kdg.deliDish.business.domain.user.DeliveryPointEvent;
 import be.kdg.deliDish.persistence.CourierMemoryRepository;
 import be.kdg.deliDish.persistence.CourierRepository;
+import be.kdg.foundation.contact.ContactInfo;
+import be.kdg.foundation.contact.Position;
 
 import java.util.Collection;
 
@@ -13,6 +15,18 @@ public class CourierManager {
     public Collection<Courier> getCouriers(){return courierRepository.entities();}
 
     public void addCourier(Courier courier){courierRepository.put(courier);}
+
+    public Position getCurrentPosition(Courier courier){
+        return courier.getCurrentPosition();
+    }
+
+    public int getDeliveryPoints(Courier courier){
+        return courier.getDeliveryPoints();
+    }
+
+    public String getCountry(Courier courier){
+        return courier.getCountry();
+    }
 
     public int calculateDeliveryPointsTotal(Courier c){
         int totalPoints = 0;

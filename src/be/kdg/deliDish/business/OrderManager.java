@@ -1,24 +1,39 @@
 package be.kdg.deliDish.business;
 
 import be.kdg.deliDish.business.domain.order.Order;
+import be.kdg.deliDish.business.domain.order.OrderState;
 import be.kdg.deliDish.persistence.OrderMemoryRepository;
 import be.kdg.deliDish.persistence.OrderRepository;
+import be.kdg.foundation.contact.Position;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderManager {
     private final OrderRepository orderRepository = new OrderMemoryRepository();
 
     public Collection<Order> getOrders(){return orderRepository.entities();}
 
+    public Collection<Order> getOpenOrders(){
+        Collection<Order> orders = orderRepository.entities();
+        Collection<Order> tempOpenOrders = new HashSet<Order>();
+
+        for(Order order : orders){
+            OrderState state = order.getCurrentState();
+
+            if(state == OrderState.ORDER_PLACED){
+                tempOpenOrders.add(order);
+            }
+        }
+
+        return tempOpenOrders;
+    }
+
     public void addOrder(Order order){orderRepository.put(order);}
 
-    public int getLowestProductionManager(Order order){
+    public int getLowestProductionTime(Order order){
         return order.getLowestProductionTime();
     }
 
@@ -31,10 +46,13 @@ public class OrderManager {
     }
 
     public List<Order> getThreeOldestOrders(Collection<Order> orders){
-        List<Order> list = new ArrayList<>();
-        for (int i = 0; i < 3 ; i++) {
-            // todo
-        }
-        return list;
+        return orderRepository.entities().stream()
+                .sorted(Comparator.comparing(Order::getOrderID))
+                .limit(3)
+                .collect(Collectors.toList());
+    }
+
+    public Position getRestaurantPosition(Order o){
+        return o.getRestaurantPosition();
     }
 }
