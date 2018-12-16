@@ -59,14 +59,6 @@ public class OrderManager {
         return o.getRestaurantPosition();
     }
 
-    public void setDeliverer(Courier courier, Order o){
-        o.setDeliverer(courier);
-    }
-
-    public void addEvent(OrderEvent orderEvent, Order o){
-        o.addEvent(orderEvent);
-    }
-
     public Order selectDelivery(int orderId, Courier courier){
         Optional<Order> optOrder = orderRepository.entities()
                 .stream()
