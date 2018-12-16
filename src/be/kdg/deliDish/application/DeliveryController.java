@@ -112,9 +112,9 @@ public class DeliveryController {
                 if (relevanteOrders.size() < 4){
                     Position restaurantPos = orderManager.getRestaurantPosition(o);
                     Position currentPos = courierManager.getCurrentPosition(appUser);
-                    double afstand = dc.getDistance(
-                            new Point(currentPos.getLattitude(), currentPos.getLongitude()),
-                            new Point(restaurantPos.getLattitude(), restaurantPos.getLongitude()));
+                    Point currentPoint = new Point(currentPos.getLattitude(), currentPos.getLongitude());
+                    Point restaurantPoint = new Point(restaurantPos.getLattitude(), restaurantPos.getLongitude());
+                    double afstand = dc.getDistance(currentPoint, restaurantPoint);
                     int lowestProductionTime = orderManager.getLowestProductionTime(o);
 
                     if (afstand * 4 < lowestProductionTime){
