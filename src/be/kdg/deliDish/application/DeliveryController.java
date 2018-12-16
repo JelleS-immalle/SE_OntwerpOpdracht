@@ -142,21 +142,11 @@ public class DeliveryController {
 
     // TODO (Week 4-5): Deze methode moet ontworpen worden voor de de definitieve oplevering. Code en diagrammen moet consistent zijn.
     public Order selectDelivery(int orderId) {
-        Collection<Order> orders = orderManager.getOrders();
+        Order order = orderManager.selectDelivery(orderId, appUser);
 
-        Optional<Order> optOrder = orders.stream().filter(o -> o.getOrderID() == orderId).findFirst();
-
-        Order order = optOrder.orElseGet(() -> null);
-
-        if (order != null){
-            order.setDeliverer(appUser);
-            OrderEvent orderEvent = new OrderEvent(LocalDateTime.now(), OrderState.COURIER_ASSIGNED, "");
-            order.addEvent(orderEvent);
-
-            courierManager.addDeliveryPointEvent(
-                    appUser,
-                    new DeliveryPointEvent(5, DeliveryPointEvent.DeliveryPointEventType.ORDER_ACCEPTED));
-        }
+        courierManager.addDeliveryPointEvent(
+                appUser,
+                new DeliveryPointEvent(5, DeliveryPointEvent.DeliveryPointEventType.ORDER_ACCEPTED));
 
         return order;
     }

@@ -1,8 +1,10 @@
 package be.kdg.deliDish.business;
 
 import be.kdg.deliDish.business.domain.order.Order;
+import be.kdg.deliDish.business.domain.order.OrderEvent;
 import be.kdg.deliDish.business.domain.order.OrderState;
 import be.kdg.deliDish.business.domain.user.Courier;
+import be.kdg.deliDish.business.domain.user.DeliveryPointEvent;
 import be.kdg.deliDish.persistence.OrderMemoryRepository;
 import be.kdg.deliDish.persistence.OrderRepository;
 import be.kdg.foundation.contact.Position;
@@ -55,5 +57,29 @@ public class OrderManager {
 
     public Position getRestaurantPosition(Order o){
         return o.getRestaurantPosition();
+    }
+
+    public void setDeliverer(Courier courier, Order o){
+        o.setDeliverer(courier);
+    }
+
+    public void addEvent(OrderEvent orderEvent, Order o){
+        o.addEvent(orderEvent);
+    }
+
+    public Order selectDelivery(int orderId, Courier courier){
+        Optional<Order> optOrder = orderRepository.entities()
+                .stream()
+                .filter(o -> o.getOrderID() == orderId).findFirst();
+
+        Order order = optOrder.orElseGet(() -> null);
+
+        if (order != null){
+            order.setDeliverer(courier);
+            OrderEvent orderEvent = new OrderEvent(LocalDateTime.now(), OrderState.COURIER_ASSIGNED, "");
+            order.addEvent(orderEvent);
+        }
+
+        return order;
     }
 }
